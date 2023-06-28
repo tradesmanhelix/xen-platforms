@@ -9,12 +9,17 @@
     - Install the Ruby asdf plugin: [https://github.com/asdf-vm/asdf-ruby](https://github.com/asdf-vm/asdf-ruby)
     - Install the NodeJS asdf plugin: [https://github.com/asdf-vm/asdf-nodejs](https://github.com/asdf-vm/asdf-nodejs)
 
-- Node: Manually install version listed in `.tool-versions` or install using `asdf`: `asdf install`
+- Node:
+    - In your terminal, enter the project's root directory.
+    - Manually install version listed in `.tool-versions` or install using `asdf`: `asdf install`
     - Run `npm install` to install dependencies.
 
-- Ruby: Manually install version listed in `.tool-versions` or install using `asdf`: `asdf install`
+- Ruby:
+    - In your terminal, enter the project's root directory.
+    - Manually install version listed in `.tool-versions` or install using `asdf`: `asdf install`
     - Run `bundle` to install dependencies.
-    - Run `bundle exec rails db:setup` to set up the database.
+    - Run `./bin/rails db:setup` to set up the database.
+    - Load example data into the dev database via: `./bin/rails db:fixtures:load`
 
 ## Start the Application
 

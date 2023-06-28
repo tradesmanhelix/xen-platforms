@@ -1,5 +1,7 @@
 borrower_1:
+  id: 1
   name: Shawn Smith
 
 borrower_2:
+  id: 2
   name: Jane Jones
