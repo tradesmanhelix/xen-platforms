@@ -36,6 +36,11 @@ gem "bootsnap", require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem "rack-cors"
 
+# Use AASM for managing object state
+# (requires after_commit_everywhere for auto-persistence)
+gem "aasm", "~> 4.12"
+gem "after_commit_everywhere", "~> 1.3"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]

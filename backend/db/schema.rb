@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_26_191348) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_28_221607) do
   create_table "borrowers", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -24,6 +24,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_26_191348) do
     t.integer "borrower_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "state", default: "created"
     t.index ["borrower_id"], name: "index_invoices_on_borrower_id"
   end
 
