@@ -28,7 +28,7 @@
 ### Backend
 
 1. In your terminal, enter the project's root directory.
-1. Run: `cd ./backend && bundle exec rake test`
+1. Run: `cd ./backend && ./bin/rails test`
 
 ### Frontend
 
