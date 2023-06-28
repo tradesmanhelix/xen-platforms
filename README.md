@@ -1,23 +1,36 @@
-## Frontend
+# Xen Platforms Interview Challenge
 
-The frontend folder contains a vite app with react and vitest pre configured. 
-Feel free to use any other framework or tooling you like.
+## Install Dependencies
 
-Tested node version: 18.16.1
-## Frontend Scripts
+- SQLite3
+    - Follow the [installation instructions for your platform](https://www.servermania.com/kb/articles/install-sqlite).
 
-Runs the app in the development mode.
-```
-npm run dev
-```
+- OPTIONAL: Install the `asdf` runtime version manager: [https://asdf-vm.com/](https://asdf-vm.com/).
+    - Install the Ruby asdf plugin: [https://github.com/asdf-vm/asdf-ruby](https://github.com/asdf-vm/asdf-ruby)
+    - Install the NodeJS asdf plugin: [https://github.com/asdf-vm/asdf-nodejs](https://github.com/asdf-vm/asdf-nodejs)
 
-Runs the tests.
-```
-npm run test
-```
+- Node: Manually install version listed in `.tool-versions` or install using `asdf`: `asdf install`
+    - Run `npm install` to install dependencies.
 
-## Backend
-The backend folder contains a rails app with a few models already created.
+- Ruby: Manually install version listed in `.tool-versions` or install using `asdf`: `asdf install`
+    - Run `bundle` to install dependencies.
+    - Run `bundle exec rails db:setup` to set up the database.
 
-Ruby version: 3.1.1
+## Start the Application
 
+1. In your terminal, enter the project's root directory.
+1. Start the backend: `./backend/bin/rails server`
+1. Start the frontend: `cd ./frontend/ && npm run dev`
+1. Visit the indicated frontend URL.
+
+## Run Tests
+
+### Backend
+
+1. In your terminal, enter the project's root directory.
+1. Run: `cd ./backend && bundle exec rake test`
+
+### Frontend
+
+1. In your terminal, enter the project's root directory.
+1. Run: `cd ./frontend && npm run test`
