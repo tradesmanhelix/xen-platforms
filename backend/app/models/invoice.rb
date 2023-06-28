@@ -4,4 +4,8 @@ class Invoice < ApplicationRecord
   validates :due_date, presence: true
 
   belongs_to :borrower
+
+  def actions
+    ["test1", "test2"]
+  end
 end

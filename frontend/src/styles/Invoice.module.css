@@ -1,0 +1,8 @@
+.invoice {
+  min-height: 200px;
+  min-width: 200px;
+  border: 3px solid black;
+  background-color: gray;
+  padding: .5rem;
+  color: black;
+}

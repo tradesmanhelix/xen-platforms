@@ -3,7 +3,7 @@
 class Api::V1::InvoicesController < ApplicationController
   def index
     invoices = Invoice.where(borrower_id: borrower_id)
-    render json: invoices
+    render json: invoices.as_json(methods: [:actions])
   end
 
   private
