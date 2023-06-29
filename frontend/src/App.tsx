@@ -1,34 +1,88 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect } from 'react'
+import { useCallback } from "react"
+
+import { Invoice } from "./components/Invoice.tsx"
+
+function getBorrowers() {
+  return fetch('/api/v1/borrowers')
+    .then(data => data.json())
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [borrowers, setBorrowers] = useState<Object[]>([])
+  const [borrowerId, setBorrowerId] = useState<number>(0)
+
+  const [invoices, setInvoices] = useState<Object[]>([])
+
+  useEffect(() => {
+    let mounted = true
+    getBorrowers()
+      .then(borrowers => {
+        if(mounted) {
+          setBorrowers(borrowers)
+        }
+      })
+    return () => mounted = false
+  }, [])
+
+  const fetchInvoices = useCallback((newBorrowerId: number) => {
+    if (newBorrowerId == borrowerId) return
+
+    setBorrowerId(newBorrowerId)
+
+    fetch(`/api/v1/borrowers/${newBorrowerId}/invoices`)
+      .then(data => data.json())
+        .then(invoices => {
+          setInvoices(invoices)
+        })
+  }, [borrowerId])
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <main className="my-4">
+      <div className="container">
+        <div className="row">
+          <div className="col">
+            <h1>Borrower Invoices</h1>
+            <p className="lead">Select a borrower to view their invoices</p>
+            <hr />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-4">
+            <div>
+              <ul style={{ cursor: "pointer", marginBottom: "0.5rem", textAlign: "left" }}>
+                {
+                  borrowers.map(mapped => (
+                    <li
+                      style={{ marginBottom: "1.5rem" }}
+                      key={mapped.id}
+                      onClick={() => fetchInvoices(mapped.id)}
+                    >{mapped.name}</li>
+                  ))
+                }
+              </ul>
+            </div>
+          </div>
+          <div className="col">
+            <div className="row g-4">
+              {
+                invoices.map(mapped => (
+                  <Invoice
+                    key={mapped.id}
+                    invoiceId={mapped.id}
+                    invoiceNumber={mapped.invoice_number}
+                    amount={mapped.amount}
+                    dueDate={mapped.due_date}
+                    invoiceState={mapped.state}
+                  />
+                ))
+              }
+            </div>
+          </div>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </main>
   )
 }
 

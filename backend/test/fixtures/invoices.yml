@@ -1,0 +1,42 @@
+invoice_1_1:
+  id: 1
+  invoice_number: 1000
+  amount: 99.99
+  due_date: <%= 2.weeks.from_now %>
+  state: <%= Invoice::STATE_CREATED %>
+  borrower_id: 1
+
+invoice_1_2:
+  invoice_number: 1001
+  amount: 999.84
+  due_date: <%= 2.days.ago %>
+  state: <%= Invoice::STATE_APPROVED %>
+  borrower_id: 1
+
+invoice_1_3:
+  invoice_number: 1002
+  amount: 1467.32
+  due_date: <%= 2.days.from_now %>
+  state: <%= Invoice::STATE_REJECTED %>
+  borrower_id: 1
+
+invoice_1_4:
+  invoice_number: 1003
+  amount: 1467.32
+  due_date: <%= 2.days.from_now %>
+  state: <%= Invoice::STATE_PURCHASED %>
+  borrower_id: 1
+
+invoice_1_5:
+  invoice_number: 1004
+  amount: 845.00
+  due_date: <%= 9.days.from_now %>
+  state: <%= Invoice::STATE_CLOSED %>
+  borrower_id: 1
+
+invoice_2_1:
+  invoice_number: 2000
+  amount: 1000.00
+  due_date: <%= 3.weeks.ago %>
+  state: <%= Invoice::STATE_CREATED %>
+  borrower_id: 2
