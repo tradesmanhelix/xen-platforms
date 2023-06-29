@@ -14,7 +14,13 @@ function customRender(ui: React.ReactElement, options = {}) {
   })
 }
 
+function createFetchResponse(data) {
+  return { json: () => new Promise((resolve) => resolve(data)) }
+}
+
 export * from '@testing-library/react'
 export { default as userEvent } from '@testing-library/user-event'
+
 // override render export
 export { customRender as render }
+export { createFetchResponse as createFetchResponse }
