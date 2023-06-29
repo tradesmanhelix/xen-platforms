@@ -29,5 +29,12 @@ module InvoiceStateTransitionable
         transitions from: :purchased, to: :closed
       end
     end
+
+    STATE_MAPPING = {
+      approved: :approve,
+      rejected: :reject,
+      purchased: :purchase,
+      closed: :close,
+    }.with_indifferent_access
   end
 end

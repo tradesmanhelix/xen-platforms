@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import styles from "../styles/Invoice.module.css"
 
 import { InvoiceActionButton } from "./InvoiceActionButton.tsx"
@@ -11,6 +13,8 @@ type InvoiceProps = {
 }
 
 export function Invoice({ invoiceId, invoiceNumber, amount, dueDate, invoiceState }: InvoiceProps) {
+  const [invoiceStatus, setInvoiceStatus] = useState<string>(invoiceState)
+
   const USDollar = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -25,10 +29,15 @@ export function Invoice({ invoiceId, invoiceNumber, amount, dueDate, invoiceStat
           <div className="my-3">
             <p className="card-text">Amount: {USDollar.format(amount)}</p>
             <p className="card-text">Due Date: {dueDate}</p>
-            <p className="card-text">Status: {invoiceState}</p>
+            <p className="card-text">Status: {invoiceStatus}</p>
           </div>
 
-          <InvoiceActionButton invoiceId={invoiceId} invoiceNumber={invoiceNumber} invoiceState={invoiceState} />
+          <InvoiceActionButton
+            invoiceId={invoiceId}
+            invoiceNumber={invoiceNumber}
+            invoiceState={invoiceStatus}
+            setInvoiceStatus={setInvoiceStatus}
+          />
         </div>
       </div>
     </div>

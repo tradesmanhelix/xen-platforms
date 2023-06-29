@@ -7,9 +7,10 @@ type InvoiceActionButtonProps = {
   invoiceId: number
   invoiceNumber: string
   invoiceState: string
+  setInvoiceStatus: (newStatus: string) => void
 }
 
-function getCreatedStateButtons(invoiceId: number, invoiceNumber: string, setQuery: Function) {
+function getCreatedStateButtons(invoiceId: number, invoiceNumber: string, updateInvoiceState: Function) {
   const approveArgs = { invAction: "approve", invNum: invoiceNumber, invId: invoiceId }
   const rejectArgs = { invAction: "reject", invNum: invoiceNumber, invId: invoiceId }
 
@@ -17,37 +18,37 @@ function getCreatedStateButtons(invoiceId: number, invoiceNumber: string, setQue
     <div className="d-grid gap-2">
       <button
         className="btn btn-primary"
-        onClick={() => confirmAction(approveArgs) && setQuery(`/api/v1/invoices/${invoiceNumber}/approve`)}
+        onClick={() => confirmAction(approveArgs) && updateInvoiceState("approved", invoiceId)}
       >Approve</button>
       <button
         className="btn btn-outline-danger"
-        onClick={() => confirmAction(rejectArgs) && setQuery(`/api/v1/invoices/${invoiceNumber}/reject`)}
+        onClick={() => confirmAction(rejectArgs) && updateInvoiceState("rejected", invoiceId)}
       >Reject</button>
     </div>
   )
 }
 
-function getApprovedStateButtons(invoiceId: number, invoiceNumber: string, setQuery: Function) {
-  const funcArgs = { invAction: "purchase", invNum: invoiceNumber, invId: invoiceId }
+function getApprovedStateButtons(invoiceId: number, invoiceNumber: string, updateInvoiceState: Function) {
+  const purchaseArgs = { invAction: "purchase", invNum: invoiceNumber, invId: invoiceId }
 
   return (
     <div className="d-grid gap-2">
       <button
         className="btn btn-success"
-        onClick={() => confirmAction(funcArgs) && setQuery(`/api/v1/invoices/${invoiceNumber}/purchase`)}
+        onClick={() => confirmAction(purchaseArgs) && updateInvoiceState("purchased", invoiceId)}
       >Purchase</button>
     </div>
   )
 }
 
-function getPurchasedStateButtons(invoiceId: number, invoiceNumber: string, setQuery: Function) {
-  const funcArgs = { invAction: "close", invNum: invoiceNumber, invId: invoiceId }
+function getPurchasedStateButtons(invoiceId: number, invoiceNumber: string, updateInvoiceState: Function) {
+  const closeArgs = { invAction: "close", invNum: invoiceNumber, invId: invoiceId }
 
   return (
     <div className="d-grid gap-2">
       <button
         className="btn btn-secondary"
-        onClick={() => confirmAction(funcArgs) && setQuery(`/api/v1/invoices/${invoiceNumber}/purchase`)}
+        onClick={() => confirmAction(closeArgs) && updateInvoiceState("closed", invoiceId)}
       >Close</button>
     </div>
   )
@@ -57,79 +58,38 @@ function confirmAction(action) {
   return confirm(`Are you sure you want to ${action.invAction} the invoice #${action.invNum}?`)
 }
 
-type ApiResponse = {
-  hits: {
-    title: string
-    objectID: string
-    url: string
-  }[]
-}
+export function InvoiceActionButton({ invoiceId, invoiceNumber, invoiceState, setInvoiceStatus }: InvoiceProps) {
 
-type State = {
-  data?: ApiResponse
-  isLoading: boolean
-  error?: string
-}
-
-type Action =
-  | { type: 'request' }
-  | { type: 'success', results: ApiResponse }
-  | { type: 'failure', error: string }
-
-function reducer(state: State, action: Action): State {
-  switch (action.type) {
-    case 'request':
-      return { isLoading: true }
-    case 'success':
-      return { isLoading: false, data: action.results }
-    case 'failure':
-      return { isLoading: false, error: action.error }
-  }
-}
-
-export function InvoiceActionButton({ invoiceId, invoiceNumber, invoiceState }: InvoiceProps) {
-  const [query, setQuery] = useState<string>("")
-  const [{
-    data,
-    isLoading,
-    error
-  }, dispatch] = useReducer(reducer, { isLoading: false })
-
-  useEffect(() => {
-    if (query == "") return
-
-    let ignore = false
-
-    dispatch({ type: 'request' })
-
+  const updateInvoiceState = useCallback((newState: string, invoiceId: string) => {
     const requestOptions = {
-      method: 'PUT'
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ invoice: { state: newState }})
     };
 
-    fetch(query, requestOptions).then(
-      (results) => { if (!ignore) dispatch({ type: 'success', results: results.data }) },
-      (error) => dispatch({ type: 'failure', error }),
-    )
-
-    return () => { ignore = true }
-  }, [query])
+    fetch(`/api/v1/invoices/${invoiceId}`, requestOptions)
+      .then(response => response.json())
+      .then(data => {
+        setInvoiceStatus(data.state)
+      })
+  }, [])
 
   const buttonsForInvoiceState = useCallback((invoiceState: string) => {
     switch (invoiceState) {
       case "created":
-        return getCreatedStateButtons(invoiceId, invoiceNumber, setQuery)
+        return getCreatedStateButtons(invoiceId, invoiceNumber, updateInvoiceState)
         break
       case "approved":
-        return getApprovedStateButtons(invoiceId, invoiceNumber, setQuery)
+        return getApprovedStateButtons(invoiceId, invoiceNumber, updateInvoiceState)
         break
       case "purchased":
-        return getPurchasedStateButtons(invoiceId, invoiceNumber, setQuery)
+        return getPurchasedStateButtons(invoiceId, invoiceNumber, updateInvoiceState)
         break
       case "rejected":
       case "closed":
         break
       default:
-        console.log(`Invalid state: ${invoiceState}`)
+        console.error(`Invalid state: ${invoiceState}`)
     }
   }, [])
 

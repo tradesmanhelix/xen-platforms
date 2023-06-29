@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :borrowers, shallow: true do
-        resources :invoices, only: [:index]
+        resources :invoices, only: [:index, :update]
       end
     end
   end

@@ -34,7 +34,6 @@ function App() {
     fetch(`/api/v1/borrowers/${newBorrowerId}/invoices`)
       .then(data => data.json())
         .then(invoices => {
-          console.log(invoices)
           setInvoices(invoices)
         })
   }, [borrowerId])
