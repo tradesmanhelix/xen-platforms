@@ -1,7 +1,5 @@
 import { useState } from 'react'
 
-import styles from "../styles/Invoice.module.css"
-
 import { InvoiceActionButton } from "./InvoiceActionButton.tsx"
 
 type InvoiceProps = {
