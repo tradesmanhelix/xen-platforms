@@ -67,7 +67,7 @@ function App() {
                 invoiceNumber={mapped.invoice_number}
                 amount={mapped.amount}
                 dueDate={mapped.due_date}
-                status={"Approved"}
+                invoiceState={mapped.state}
               />
             ))
           }
