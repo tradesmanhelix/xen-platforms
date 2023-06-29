@@ -1,9 +1,6 @@
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { useCallback } from "react"
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 
 import { Invoice } from "./components/Invoice.tsx"
 
@@ -43,37 +40,50 @@ function App() {
   }, [borrowerId])
 
   return (
-    <>
-      <div className="wrapper">
-        <h1>Borrowers</h1>
-        <div style={{ textAlign: "center" }}>
-          <ul style={{ cursor: "pointer", marginBottom: "0.5rem", textAlign: "left" }}>
-            {
-              borrowers.map(mapped => (
-                <li
-                  style={{ marginBottom: "1.5rem" }}
-                  key={mapped.id}
-                  onClick={() => fetchInvoices(mapped.id)}
-                >{mapped.name}</li>
-              ))
-            }
-          </ul>
+    <main className="my-4">
+      <div className="container">
+        <div className="row">
+          <div className="col">
+            <h1>Borrower Invoices</h1>
+            <p className="lead">Select a borrower to view their invoices</p>
+            <hr />
+          </div>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(75px, 1fr))", gap: ".5rem" }}>
-          {
-            invoices.map(mapped => (
-              <Invoice
-                key={mapped.id}
-                invoiceNumber={mapped.invoice_number}
-                amount={mapped.amount}
-                dueDate={mapped.due_date}
-                invoiceState={mapped.state}
-              />
-            ))
-          }
+        <div className="row">
+          <div className="col-lg-4">
+            <div>
+              <ul style={{ cursor: "pointer", marginBottom: "0.5rem", textAlign: "left" }}>
+                {
+                  borrowers.map(mapped => (
+                    <li
+                      style={{ marginBottom: "1.5rem" }}
+                      key={mapped.id}
+                      onClick={() => fetchInvoices(mapped.id)}
+                    >{mapped.name}</li>
+                  ))
+                }
+              </ul>
+            </div>
+          </div>
+          <div className="col">
+            <div className="row g-4">
+              {
+                invoices.map(mapped => (
+                  <Invoice
+                    key={mapped.id}
+                    invoiceId={mapped.id}
+                    invoiceNumber={mapped.invoice_number}
+                    amount={mapped.amount}
+                    dueDate={mapped.due_date}
+                    invoiceState={mapped.state}
+                  />
+                ))
+              }
+            </div>
+          </div>
         </div>
       </div>
-    </>
+    </main>
   )
 }
 
